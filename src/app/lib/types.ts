@@ -21,7 +21,7 @@ export interface FaceDetection {
   age?: number
   gender?: "male" | "female"
   genderProbability?: number
-  descriptor?: Float32Array
+  descriptor?: number[]
 }
 
 export interface WebcamState {

@@ -53,11 +53,19 @@ export async function detectFaces(
           y: pos.y,
         })),
       },
-      expressions: detection.expressions,
+      expressions: {
+        neutral: detection.expressions.neutral,
+        happy: detection.expressions.happy,
+        sad: detection.expressions.sad,
+        angry: detection.expressions.angry,
+        fearful: detection.expressions.fearful,
+        disgusted: detection.expressions.disgusted,
+        surprised: detection.expressions.surprised,
+      },
       age: Math.round(detection.age),
       gender: detection.gender as "male" | "female",
       genderProbability: detection.genderProbability,
-      descriptor: detection.descriptor,
+      descriptor: detection.descriptor ? Array.from(detection.descriptor) : undefined,
     }))
   } catch (error) {
     console.error("Error detecting faces:", error)
