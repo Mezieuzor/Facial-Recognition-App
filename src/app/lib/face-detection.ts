@@ -1,20 +1,34 @@
-import * as faceapi from "@vladmandic/face-api"
 import type { FaceDetection } from "./types"
 
 let modelsLoaded = false
+let faceapi: any = null
+
+async function getFaceAPI() {
+  if (!faceapi) {
+    // Dynamic import to ensure face-api only loads in browser
+    faceapi = await import("@vladmandic/face-api")
+  }
+  return faceapi
+}
 
 export async function loadModels(): Promise<void> {
   if (modelsLoaded) return
 
+  // Ensure we're in browser environment
+  if (typeof window === "undefined") {
+    throw new Error("Face detection can only run in browser environment")
+  }
+
+  const api = await getFaceAPI()
   const MODEL_URL = "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model"
 
   try {
     await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-      faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
-      faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-      faceapi.nets.ageGenderNet.loadFromUri(MODEL_URL),
+      api.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+      api.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+      api.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+      api.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+      api.nets.ageGenderNet.loadFromUri(MODEL_URL),
     ])
     modelsLoaded = true
     console.log("Face detection models loaded successfully")
@@ -31,15 +45,17 @@ export async function detectFaces(
     await loadModels()
   }
 
+  const api = await getFaceAPI()
+
   try {
-    const detections = await faceapi
-      .detectAllFaces(input, new faceapi.TinyFaceDetectorOptions())
+    const detections = await api
+      .detectAllFaces(input, new api.TinyFaceDetectorOptions())
       .withFaceLandmarks()
       .withFaceExpressions()
       .withAgeAndGender()
       .withFaceDescriptors()
 
-    return detections.map((detection, index) => ({
+    return detections.map((detection: any, index: number) => ({
       id: `face-${Date.now()}-${index}`,
       box: {
         x: detection.detection.box.x,
@@ -48,7 +64,7 @@ export async function detectFaces(
         height: detection.detection.box.height,
       },
       landmarks: {
-        positions: detection.landmarks.positions.map((pos) => ({
+        positions: detection.landmarks.positions.map((pos: any) => ({
           x: pos.x,
           y: pos.y,
         })),
