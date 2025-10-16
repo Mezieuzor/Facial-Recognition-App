@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
+import Image from "next/image"
 import { useAppDispatch, useAppSelector } from "@/app/lib/store/hooks"
 import { startWebcam, stopWebcam, setWebcamError } from "@/app/lib/store/webcamSlice"
 import { setFaces, setProcessing } from "@/app/lib/store/detectionSlice"
@@ -67,27 +68,7 @@ export function WebcamCapture() {
     }
   }, [isActive])
 
-  useEffect(() => {
-    if (isActive && videoRef.current && modelsReady) {
-      startFaceDetection()
-    } else {
-      stopFaceDetection()
-    }
-
-    return () => {
-      stopFaceDetection()
-    }
-  }, [isActive, modelsReady])
-
-  useEffect(() => {
-    return () => {
-      if (isActive) {
-        dispatch(stopWebcam())
-      }
-    }
-  }, [isActive, dispatch])
-
-  const startFaceDetection = () => {
+  const startFaceDetection = useCallback(() => {
     if (detectionIntervalRef.current) return
 
     detectionIntervalRef.current = setInterval(async () => {
@@ -98,7 +79,7 @@ export function WebcamCapture() {
         dispatch(setProcessing(false))
       }
     }, 100)
-  }
+  }, [dispatch])
 
   const stopFaceDetection = () => {
     if (detectionIntervalRef.current) {
@@ -106,6 +87,26 @@ export function WebcamCapture() {
       detectionIntervalRef.current = null
     }
   }
+
+  useEffect(() => {
+    if (isActive && videoRef.current && modelsReady) {
+      startFaceDetection()
+    } else {
+      stopFaceDetection()
+    }
+
+    return () => {
+      stopFaceDetection()
+    }
+  }, [isActive, modelsReady, startFaceDetection])
+
+  useEffect(() => {
+    return () => {
+      if (isActive) {
+        dispatch(stopWebcam())
+      }
+    }
+  }, [isActive, dispatch])
 
   const handleStartWebcam = async () => {
     try {
@@ -182,7 +183,14 @@ export function WebcamCapture() {
 
             {capturedImage && (
               <div className="relative">
-                <img src={capturedImage || "/placeholder.svg"} alt="Captured" className="w-full h-auto" />
+                <Image
+                  src={capturedImage || "/placeholder.svg"}
+                  alt="Captured"
+                  width={displayDimensions.width || 800}
+                  height={displayDimensions.height || 600}
+                  className="w-full h-auto"
+                  unoptimized
+                />
                 <div className="absolute top-4 right-4">
                   <button
                     onClick={() => setCapturedImage(null)}

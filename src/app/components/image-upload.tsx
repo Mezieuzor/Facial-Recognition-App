@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useRef, useState } from "react"
 import { Upload, X } from "lucide-react"
 import { useAppDispatch, useAppSelector } from "@/app/lib/store/hooks"
@@ -97,6 +96,7 @@ export function ImageUpload() {
           </div>
         ) : (
           <div className="relative">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               ref={imageRef}
               src={uploadedImage || "/placeholder.svg"}
