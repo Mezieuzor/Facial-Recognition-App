@@ -2,28 +2,105 @@
 💡💡💡💡💡💡💡💡
 Web Dev Frontend
 💡💡💡💡💡💡💡💡
-Our tech stack is: Angular 2+, TypeScript, Bootstrap
-
-Challenge: Webcam Image Feed with Facial Recognition
-
-Your task is to create a web application that can capture an image feed from the user's webcam and perform facial recognition on the captured images using a chosen framework such as OpenCV, TensorFlow, or Dlib.
-
-Requirements:
-
-The application should be built using Angular / React, or Vue web app, and Typescript.
-The user should be able to start and stop the webcam feed.
-The captured images should be processed with a facial recognition framework of your choice to identify any faces in the images.
-The application should display the captured images with an overlay indicating the position and size of any detected faces.
-The application should also display additional information about the detected faces such as their name, age, gender, and any other relevant information.
-The application should be able to handle multiple faces in a single image and display information about all of them.
-The application should be responsive and work well on desktop and mobile devices.
-
-Bonus:
-Add the ability for the user to upload an image from their device and perform facial recognition on it.
-Implement real-time emotion recognition to detect emotions on the faces in the captured images.
 
 
-Developed by Mezieuzor Amadike
+⚙️ What It Does — Step by Step
+1. Loads the AI Models
+When the component starts, it loads the face detection models (like training the camera to recognize faces).
+
+
+While loading, the screen says “Loading AI models…”.
+
+
+Once models are ready, face detection can begin.
+
+
+2. Starts and Stops the Webcam
+When you click Start Webcam, it asks permission to use your device’s camera.
+
+
+The video feed appears on the screen.
+
+
+Clicking Stop Webcam turns it off and clears the stream.
+
+
+3. Face Detection (Real-Time)
+Once the webcam is active and models are loaded, it begins scanning the video feed every 100 milliseconds.
+
+
+Each time it scans:
+
+
+It sends the video frame to the face detection function (detectFaces()).
+
+
+The AI looks for faces and returns data (like position, landmarks, and emotions).
+
+
+That data is stored in the Redux store for display (setFaces()).
+
+
+You’ll see boxes or overlays around detected faces drawn by the FaceOverlay component.
+
+
+4. Capture Image
+The Capture Image button takes a snapshot of the current video frame.
+
+
+It saves it as an image (PNG format) and shows it on screen.
+
+
+You can clear the captured image anytime.
+
+
+5. Status Display
+At the bottom, it shows live system info:
+Webcam: On or Off
+
+
+Faces Detected: How many faces are visible
+
+
+Processing: Whether the AI is analyzing frames or ready
+
+
+6. Charts and Face Info
+On the right side, EmotionChart shows emotions or analysis results (like happy, sad, neutral, etc.).
+
+
+Below everything, FaceInfoPanel displays detailed face data for each detected person (like emotion confidence, bounding box info, etc.).
+
+
+
+🧩 Key Technical Parts (Simplified)
+Feature
+What It Does
+Controlled By
+Video Element
+Shows the live webcam feed
+videoRef
+Canvas
+Hidden tool used for capturing screenshots
+canvasRef
+AI Models
+Detects faces in real time
+loadModels() + detectFaces()
+Redux Store
+Keeps track of webcam state and faces
+webcamSlice + detectionSlice
+Face Overlay
+Draws boxes around detected faces
+FaceOverlay component
+Emotion Chart
+Visualizes detected emotions
+EmotionChart component
+Face Info Panel
+Lists all faces with analysis
+FaceInfoPanel component
+
+
+
 
 
 
