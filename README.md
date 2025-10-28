@@ -1,3 +1,33 @@
+
+💡💡💡💡💡💡💡💡
+Web Dev Frontend
+💡💡💡💡💡💡💡💡
+Our tech stack is: Angular 2+, TypeScript, Bootstrap
+
+Challenge: Webcam Image Feed with Facial Recognition
+
+Your task is to create a web application that can capture an image feed from the user's webcam and perform facial recognition on the captured images using a chosen framework such as OpenCV, TensorFlow, or Dlib.
+
+Requirements:
+
+The application should be built using Angular / React, or Vue web app, and Typescript.
+The user should be able to start and stop the webcam feed.
+The captured images should be processed with a facial recognition framework of your choice to identify any faces in the images.
+The application should display the captured images with an overlay indicating the position and size of any detected faces.
+The application should also display additional information about the detected faces such as their name, age, gender, and any other relevant information.
+The application should be able to handle multiple faces in a single image and display information about all of them.
+The application should be responsive and work well on desktop and mobile devices.
+
+Bonus:
+Add the ability for the user to upload an image from their device and perform facial recognition on it.
+Implement real-time emotion recognition to detect emotions on the faces in the captured images.
+
+
+Developed by Mezieuzor Amadike
+
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
